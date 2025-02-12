@@ -6,4 +6,5 @@ layout: home
 ---
 **Currently playing around with github-pages and jekyll, trying to figure out how things work. Nothing fancy yet**
 
-[A spinning cube](pages/spinning-cube.html 'Original code from https://www.instructables.com/Rotating-Cube-Using-JavaScript/')
+## Random stuff
+[Wheel of fortune minigame - WIP](pages/wheel-of-fortune.html)
