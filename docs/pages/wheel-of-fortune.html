@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>spin spin spin spin spin spin spin</title>
+
+    <style>
+
+        #wheelContainer {
+            margin: 100px auto;
+            width: 300px;
+            height: 300px;
+            text-align: center;
+            border: pink 2px solid;
+            border-radius: 9999px;
+            /*background: conic-gradient(red 0deg 90deg, blue 90deg 360deg);*/
+            /*background: conic-gradient(#7544ca 0deg 180deg, #687a6e 180deg 360deg);*/
+            background: linear-gradient(90deg, red 0%, yellow 100%);
+            z-index: 1;
+            padding: 0;
+        }
+
+        /*#arrow {*/
+        /*    width: 300px;*/
+        /*    height: 300px;*/
+        /*    margin: auto;*/
+        /*    vertical-align: center;*/
+        /*    text-align: right;*/
+        /*    line-height: 300px;*/
+        /*    position: absolute;*/
+        /*    font-weight: bold;*/
+        /*    z-index: 3;*/
+        /*}*/
+
+        .dot {
+            height: 15px;
+            width: 15px;
+            /*background-color: #bbb;*/
+            border-radius: 50%;
+            margin-top: 10px;
+            display: inline-block;
+        }
+
+        .wheelOptionLabel {
+            height: 25px;
+            width: 25px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+    </style>
+</head>
+<body>
+
+<div>
+
+    <div id="wheelContainer">
+
+    </div>
+
+    <!--<div id="arrow">-->
+    <!--    =>-->
+
+    <!--</div>-->
+</div>
+
+
+
+
+<hr/>
+<div id="optionAdditionContainer">
+
+    <br/>
+
+    <label> New option:
+        <input type="text" id="newOptionFieldId">
+    </label>
+
+    <button onclick="addOption()">Add option</button>
+    <button onclick="clearAll()">Clear all Options</button>
+    <button onclick="spinTheWheel()">SPIN THE WHEEL</button>
+    <button onclick="stopTheWheel()">STOP THE WHEEL</button>
+
+    <br/>
+    <div id="wheelOptions">
+        You need to add at least two options to get colors!
+    </div>
+
+</div>
+
+
+<script>
+    const SPIN_INTERVAL = 1;
+
+    let wheelContainerDiv = document.getElementById('wheelContainer');
+    let wheelOptionsDiv = document.getElementById('wheelOptions');
+
+    const optionsMap = new Map();
+    let degrees = 0;
+    let isSpinning = false;
+
+    let degrees_modifier = 0;
+
+    function clearAll() {
+        optionsMap.clear();
+        wheelOptionsDiv.innerHTML = "You need to add at least two options to get colors!"
+        wheelContainerDiv.style.background = 'linear-gradient(90deg, red 0%, yellow 100%)'
+    }
+
+    function addOption() {
+        let valueOfInput = document.getElementById('newOptionFieldId').value
+
+        // No cheaters allowed!!!
+        if (optionsMap.get(valueOfInput) != null) {
+            alert("CHEATER!!!!")
+            return
+        }
+
+        // Get next color
+        let newRandomColour = getRandomHexColor();
+
+        while (hasColorAlreadyInMap(newRandomColour)) {
+            newRandomColour = getRandomHexColor()
+        }
+        optionsMap.set(valueOfInput, getRandomHexColor())
+
+        setUpListOfOptionsInUi()
+        //Update the wheel colors (only if we have at least two colors)!!!!
+        if (optionsMap.size > 1) {
+            console.log(wheelContainerDiv.style.background)
+            wheelContainerDiv.style.background = getStringForPieColors()
+        }
+    }
+
+
+    function hasColorAlreadyInMap(newRandomColour) {
+        if (optionsMap.size === 0) {
+            return false
+        }
+
+        optionsMap.forEach(_ => {
+            if (_.value === newRandomColour) {
+                return true
+            }
+        })
+        return false
+    }
+
+    function getRandomHexColor() {
+        // Stolen from https://css-tricks.com/snippets/javascript/random-hex-color/
+        return Math.floor(Math.random() * 16777215).toString(16);
+        // document.body.style.backgroundColor = "#" + randomColor;
+        // color.innerHTML = "#" + randomColor;
+    }
+
+    function getStringForPieColors() {
+        let conicGradientString = "conic-gradient(";
+        let rotation_step = 360 / optionsMap.size
+        let current_rotation = 0
+
+        // We expect to create something like this  background: conic-gradient(red 0deg 90deg, blue 90deg 360deg);
+
+
+        optionsMap.forEach(value => {
+            if (conicGradientString.endsWith("deg")) {
+                conicGradientString += ", "
+            }
+
+            conicGradientString += "#" + value + " " + current_rotation + "deg ";
+            current_rotation += rotation_step;
+            conicGradientString += "" + current_rotation + "deg";
+        })
+
+        conicGradientString += ")"
+
+        return conicGradientString
+    }
+
+    function setUpListOfOptionsInUi() {
+        wheelOptionsDiv.innerHTML = ""
+
+        optionsMap.forEach((value, key) => {
+            wheelOptionsDiv.innerHTML +=
+                '<span class="dot" style="background-color:#' + value + ' "></span> <span class="wheelOptionLabel">' + key + '</span><br>'
+        })
+
+    }
+
+
+    async function spinTheWheel() {
+        isSpinning = true;
+        degrees_modifier = 20;
+        // wheelContainerDiv.style.transform = 'rotate(-150deg)';
+        while (isSpinning) {
+            degrees += degrees_modifier;
+            wheelContainerDiv.style.transform = 'rotate(' + degrees + 'deg)';
+            await new Promise(r => setTimeout(r, SPIN_INTERVAL));
+        }
+    }
+
+    async function stopTheWheel() {
+        isSpinning = false;
+        while (degrees_modifier > 0) {
+            degrees_modifier -= 0.1;
+            degrees += degrees_modifier;
+            wheelContainerDiv.style.transform = 'rotate(' + degrees + 'deg)';
+            await new Promise(r => setTimeout(r, SPIN_INTERVAL));
+        }
+
+
+        // Try to find the winner
+        let endPositionRotation = getCurrentRotation() % 360
+        decideWinner(endPositionRotation)
+
+    }
+
+    function getCurrentRotation(){
+      return wheelContainerDiv.style.getPropertyValue("transform")
+            .replace('rotate(', '')
+            .replace('deg)', '')
+    }
+
+    function decideWinner(endPositionRotation) {
+        let rotation_step = 360 / optionsMap.size
+        let current_rotation = 0
+
+        optionsMap.forEach((value, key) => {
+            if (current_rotation <= endPositionRotation &&  endPositionRotation < current_rotation + rotation_step) {
+                wheelOptionsDiv.innerHTML += "<br> And the winner is " + key
+            }
+            current_rotation += rotation_step;
+        })
+
+    }
+
+
+</script>
+</body>
+</html>
