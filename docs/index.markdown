@@ -7,5 +7,5 @@ layout: home
 **Random unfinished js things. Why finish a project when you can always start another one?**
 
 ## Random stuff
-[Wheel of fortune minigame - WIP](pages/wheel-of-fortune.html)
-[Conway's Game of Life - WIP](pages/conway.html)
+- [Wheel of fortune minigame - WIP](pages/wheel-of-fortune.html)
+- [Conway's Game of Life - WIP](pages/conway.html)
