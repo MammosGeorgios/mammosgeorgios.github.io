@@ -19,7 +19,7 @@
 
         #conway {
             margin: 0 auto;
-            border: 2px solid black;
+            border: 2px solid purple;
         }
 
     </style>
@@ -37,29 +37,41 @@
     const ARRAY_LENGTH = CANVAS_SIZE / BOX_SIZE
     const CANVAS = document.getElementById("conway")
     const CANVAS_CTX = CANVAS.getContext("2d")
-    const INTERVAL_TIMEOUT = 500
+    const INTERVAL_TIMEOUT = 5
 
     let isWorldAlive = false
     let conwayBoard = new Array(ARRAY_LENGTH).fill(0).map(() => new Array(ARRAY_LENGTH).fill(0))
+    let iterationCount = 0
 
     async function initialize() {
 
-        //TODO Set up initial scenario
+        // //TODO Set up initial scenarios as options
         for (let i = 0; i < ARRAY_LENGTH; i++) {
             for (let j = 0; j < ARRAY_LENGTH; j++) {
-                conwayBoard[i][j] = (i + j) % 13
+
+                if ((i + j) % 5 === 0) {
+                    conwayBoard[i][j] = 1
+                }
+
+                if ((i - j) % 13 === 0) {
+                    conwayBoard[i][j] = 1
+                }
+
             }
         }
-        await simulateWorld()
 
+        await simulateWorld()
     }
 
     async function simulateWorld() {
         isWorldAlive = true;
         await drawNextFrame(conwayBoard)
-
+        new Promise(r => setTimeout(r, INTERVAL_TIMEOUT))
         while (isWorldAlive) {
 
+            if(iterationCount %500 === 0){
+                addInvaders()
+            }
             await Promise.all([
                 new Promise(r => setTimeout(r, INTERVAL_TIMEOUT)),
                 prepareAndDrawNextFrame()
@@ -76,57 +88,126 @@
         drawNextFrame()
     }
 
+    function drawNextFrame() {
+        if (!CANVAS_CTX) {
+            alert("This page is not supported by your browser")
+            return
+        }
+        iterationCount++
+
+        for (let y = 0; y < ARRAY_LENGTH; y++) {
+            for (let x = 0; x < ARRAY_LENGTH; x++) {
+
+                //Yes y and x are inverted on purpose, so what?!
+                if (conwayBoard[y][x] === 1) {
+                    CANVAS_CTX.fillStyle = "rgb(255 215 0)"
+                } else {
+                    CANVAS_CTX.fillStyle = "rgb(0 0 0)"
+                }
+
+                CANVAS_CTX.fillRect(x * BOX_SIZE, y * BOX_SIZE, BOX_SIZE, BOX_SIZE)
+            }
+        }
+
+    }
+
+
     function getNextFrameBoard() {
 
+        /*
+       *
+       *     If a cell is ON and has fewer than two neighbors that are ON, it turns OFF
+       *     If a cell is ON and has either two or three neighbors that are ON, it remains ON.
+       *     If a cell is ON and has more than three neighbors that are ON, it turns OFF.
+       *     If a cell is OFF and has exactly three neighbors that are ON, it turns ON.
+       *
+       */
+
         let newBoard = new Array(ARRAY_LENGTH).fill(0).map(() => new Array(ARRAY_LENGTH).fill(0))
-        let nextModulusValue = Math.floor(Math.random() * 12)
-        console.log(nextModulusValue)
+
         for (let i = 0; i < ARRAY_LENGTH; i++) {
             for (let j = 0; j < ARRAY_LENGTH; j++) {
-
-                newBoard[i][j] = (i + j) % nextModulusValue;
+                let sum = getNeighbourSum(i, j);
+                newBoard[i][j] = calculateNextCellValueBasedOnSumAndCurrentValue(sum, conwayBoard[i][j])
             }
         }
 
         return newBoard;
     }
 
-    function drawNextFrame() {
-        if (!CANVAS_CTX) {
-            alert("This page is not supported by your browser")
-            return
+    function getNeighbourSum(i, j) {
+        return conwayBoard[mod(i - 1, ARRAY_LENGTH)][mod(j - 1, ARRAY_LENGTH)] + conwayBoard[i][mod(j - 1, ARRAY_LENGTH)] + conwayBoard[mod(i + 1, ARRAY_LENGTH)][mod(j - 1, ARRAY_LENGTH)]
+            + conwayBoard[mod(i - 1, ARRAY_LENGTH)][j] + conwayBoard[mod(i + 1, ARRAY_LENGTH)][j]
+            + conwayBoard[mod(i - 1, ARRAY_LENGTH)][mod(j + 1, ARRAY_LENGTH)] + conwayBoard[i][mod(j + 1, ARRAY_LENGTH)] + conwayBoard[mod(i + 1, ARRAY_LENGTH)][mod(j + 1, ARRAY_LENGTH)]
+    }
+
+    function calculateNextCellValueBasedOnSumAndCurrentValue(sum, currentValue) {
+
+        if ((currentValue === 1 && (sum === 2 || sum === 3))
+            || (currentValue === 0 && sum === 3)) {
+            return 1
+
         }
+        return 0
+    }
 
-        for (let i = 0; i < ARRAY_LENGTH; i++) {
-            for (let j = 0; j < ARRAY_LENGTH; j++) {
 
-                if (conwayBoard[i][j] !== 0) {
-                    CANVAS_CTX.fillStyle = "rgb(255 215 0)"
-                } else {
-                    CANVAS_CTX.fillStyle = "rgb(0 0 0)"
-                }
+    function mod(n, m) {
+        // We use this method for a custom modulus in order to have an "infinite/toroid" world
+        // Classic js has -1 % 50 = -1, while in other languages (ie python) -1 % 50 = 49.
+        // Having the values "circle around" like this is helpful for our loop calculation
+        return ((n % m) + m) % m;
+    }
 
-                CANVAS_CTX.fillRect(i * BOX_SIZE, j * BOX_SIZE, BOX_SIZE, BOX_SIZE)
-            }
-        }
+
+    function addInvaders(){
+
+        addGlider(0, 0)
+        addGlider(10, 0)
+        addGlider(20, 0)
+        addGlider(30, 0)
+        addGlider(40, 0)
+        addGlider(50, 0)
+        addGlider(60, 0)
+        addGlider(70, 0)
+        addGlider(80, 0)
+        addGlider(90, 0)
+        addGlider(100, 0)
+        addGlider(110, 0)
+        addGlider(120, 0)
+
+        addOctagonPhase5(73, 73)
 
     }
 
-    function calculateNextCellValue(
-        arrayAroundCell
-    ) {
-        /*
-        *
-        *     If a cell is ON and has fewer than two neighbors that are ON, it turns OFF
-        *     If a cell is ON and has either two or three neighbors that are ON, it remains ON.
-        *     If a cell is ON and has more than three neighbors that are ON, it turns OFF.
-        *     If a cell is OFF and has exactly three neighbors that are ON, it turns ON.
-        *
-        */
-
-
+    function addGlider(posX, posY) {
+        conwayBoard[posX][posY + 1] = 1
+        conwayBoard[posX + 1][posY + 2] = 1
+        conwayBoard[posX + 2][posY] = 1
+        conwayBoard[posX + 2][posY + 1] = 1
+        conwayBoard[posX + 2][posY + 2] = 1
     }
 
+
+    function addOctagonPhase5(posX, posY) {
+
+        conwayBoard[posX + 0][posY + 3] = 1
+        conwayBoard[posX + 0][posY + 4] = 1
+        conwayBoard[posX + 1][posY + 2] = 1
+        conwayBoard[posX + 1][posY + 5] = 1
+        conwayBoard[posX + 2][posY + 1] = 1
+        conwayBoard[posX + 2][posY + 6] = 1
+        conwayBoard[posX + 3][posY + 0] = 1
+        conwayBoard[posX + 3][posY + 7] = 1
+        conwayBoard[posX + 4][posY + 0] = 1
+        conwayBoard[posX + 4][posY + 7] = 1
+        conwayBoard[posX + 5][posY + 1] = 1
+        conwayBoard[posX + 5][posY + 6] = 1
+        conwayBoard[posX + 6][posY + 2] = 1
+        conwayBoard[posX + 6][posY + 5] = 1
+        conwayBoard[posX + 7][posY + 3] = 1
+        conwayBoard[posX + 7][posY + 4] = 1
+    }
 
 </script>
 </body>
