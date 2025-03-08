@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>mammosgeorgios - Conway's Game of Life</title>
+
+    <style>
+
+
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #3f3f3f;
+        }
+
+
+        #conway {
+            margin: 0 auto;
+            border: 2px solid black;
+        }
+
+    </style>
+</head>
+<body>
+
+<canvas id="conway" width="500" height="500">Conway's Game of Life</canvas>
+
+
+<script>
+    window.addEventListener("load", initialize);
+
+    const BOX_SIZE = 4
+    const CANVAS_SIZE = 500
+    const ARRAY_LENGTH = CANVAS_SIZE / BOX_SIZE
+    const CANVAS = document.getElementById("conway")
+    const CANVAS_CTX = CANVAS.getContext("2d")
+    const INTERVAL_TIMEOUT = 500
+
+    let isWorldAlive = false
+    let conwayBoard = new Array(ARRAY_LENGTH).fill(0).map(() => new Array(ARRAY_LENGTH).fill(0))
+
+    async function initialize() {
+
+        //TODO Set up initial scenario
+        for (let i = 0; i < ARRAY_LENGTH; i++) {
+            for (let j = 0; j < ARRAY_LENGTH; j++) {
+                conwayBoard[i][j] = (i + j) % 13
+            }
+        }
+        await simulateWorld()
+
+    }
+
+    async function simulateWorld() {
+        isWorldAlive = true;
+        await drawNextFrame(conwayBoard)
+
+        while (isWorldAlive) {
+
+            await Promise.all([
+                new Promise(r => setTimeout(r, INTERVAL_TIMEOUT)),
+                prepareAndDrawNextFrame()
+            ])
+        }
+
+    }
+
+    async function prepareAndDrawNextFrame() {
+        // CalculateNextBoard and await
+
+        conwayBoard = getNextFrameBoard();
+
+        drawNextFrame()
+    }
+
+    function getNextFrameBoard() {
+
+        let newBoard = new Array(ARRAY_LENGTH).fill(0).map(() => new Array(ARRAY_LENGTH).fill(0))
+        let nextModulusValue = Math.floor(Math.random() * 12)
+        console.log(nextModulusValue)
+        for (let i = 0; i < ARRAY_LENGTH; i++) {
+            for (let j = 0; j < ARRAY_LENGTH; j++) {
+
+                newBoard[i][j] = (i + j) % nextModulusValue;
+            }
+        }
+
+        return newBoard;
+    }
+
+    function drawNextFrame() {
+        if (!CANVAS_CTX) {
+            alert("This page is not supported by your browser")
+            return
+        }
+
+        for (let i = 0; i < ARRAY_LENGTH; i++) {
+            for (let j = 0; j < ARRAY_LENGTH; j++) {
+
+                if (conwayBoard[i][j] !== 0) {
+                    CANVAS_CTX.fillStyle = "rgb(255 215 0)"
+                } else {
+                    CANVAS_CTX.fillStyle = "rgb(0 0 0)"
+                }
+
+                CANVAS_CTX.fillRect(i * BOX_SIZE, j * BOX_SIZE, BOX_SIZE, BOX_SIZE)
+            }
+        }
+
+    }
+
+    function calculateNextCellValue(
+        arrayAroundCell
+    ) {
+        /*
+        *
+        *     If a cell is ON and has fewer than two neighbors that are ON, it turns OFF
+        *     If a cell is ON and has either two or three neighbors that are ON, it remains ON.
+        *     If a cell is ON and has more than three neighbors that are ON, it turns OFF.
+        *     If a cell is OFF and has exactly three neighbors that are ON, it turns ON.
+        *
+        */
+
+
+    }
+
+
+</script>
+</body>
+</html>
