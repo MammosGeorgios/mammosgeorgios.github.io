@@ -2,6 +2,7 @@
 layout: post
 title:  "Google cloud guide example"
 categories: jacademy
+published: false
 ---
 # Getting started with google cloud
 
@@ -22,7 +23,7 @@ Postgres & Tomcat
 - Set up your billing information by clicking on the billing section in the console
   and adding your payment method. Do not worry about charges, we will utilise
   the $300 free credits
-![gCloudPurchace.png](/assets/images/gCloudPurchace.png)
+![gCloudPurchace.png](/assets/images/jacademy/gCloudPurchace.png)
 
 ### 2) Create an Ubuntu OS Virtual Machine:
 ...
