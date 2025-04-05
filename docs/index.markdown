@@ -4,8 +4,8 @@
 
 layout: home
 ---
-**Random unfinished js things. Why finish a project when you can always start another one?**
+## Home
 
-## Random stuff
+Random stuff - usually unfinished
 - [Wheel of fortune minigame - WIP](pages/wheel-of-fortune.html)
 - [Conway's Game of Life - WIP](pages/conway.html)
