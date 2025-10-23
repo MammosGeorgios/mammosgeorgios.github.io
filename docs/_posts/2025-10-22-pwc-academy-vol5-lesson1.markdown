@@ -62,7 +62,7 @@ The dot (.) in the command tells it to create the files where we are. We could i
 Finally, we want to activate the venv.
 To do so, we need to run the following command, from the project directory:
 ```bash
-source myfirstproject/bin/activate
+source bin/activate
 ```
 
 To verify which venv you are running, you can run the following command:
