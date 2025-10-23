@@ -249,3 +249,26 @@ def delete_employee_by_id(id:int) :
 - [FastAPI features](https://fastapi.tiangolo.com/features/#fastapi-features)
 - [HTTP request methods](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Methods)
 
+## Potential fixes
+
+PowerShell:
+``` powershell Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force```
+ή
+``` powershell Set-ExecutionPolicy -Scope LocalMachine -ExecutionPolicy RemoteSigned -Force```
+Commands:
+``` sh
+python -m venv .
+./scripts/activate
+python -m pip --version
+```
+
+```powershell
+./env/Scripts/activate.bat
+```
+[source](https://forum.freecodecamp.org/t/cannot-activate/557438/3)
+
+
+```powershell
+./Scripts/activate.bat
+```
+
