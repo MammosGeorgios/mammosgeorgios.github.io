@@ -1,8 +1,8 @@
 ---
-layout: post
-title:  "PwC JAcademy Volume 5 Kickoff"
-categories: jacademy
-published: false
+layout: default
+title: Academy
+permalink: /academy/getting-started-with-python
+include_in_nav_bar: false
 ---
 
 
@@ -20,7 +20,7 @@ published: false
 
 ## Verify python is up and running
 
-We can to make sure that we have python installed, and we are in the correct version.
+We need to make sure that we have python installed, and we are in the correct version.
 We want to use 3.14 (**π**ython :)).
 
 To check for our python version, we want to run the following command:
@@ -28,7 +28,7 @@ To check for our python version, we want to run the following command:
 python3 -V
 ```
 
-- Whenever we use terminal command, we will be using bash (git bash for windows users).
+- Whenever we use terminal command, we will be using bash (git bash for Windows users).
 - Bash is strict on capitals, make sure you write -V and not -v.
 - If you somehow end up in a python terminal, type exit to return.
 
@@ -83,7 +83,7 @@ To use FastAPI, we need to set up the dependency for it and then prepare out ini
 
 ### Dependency management
 
-While you can simply run pip instal for everything, eventually you will run in issues where you don't know what you have installed and it's very hard to replicate your project setup. So we also need a way to track our dependencies.
+While you can simply run pip install for everything, eventually you will run in issues where you don't know what you have installed and it's very hard to replicate your project setup. So we also need a way to track our dependencies.
 
 #### First we want to instal FastAPI as a dependency
 
@@ -100,7 +100,7 @@ pip freeze > requirements.txt
 
 Running the above command will create a new file, with all dependencies. This is useful since we want to be able to replicate the exact application on multiple computers eventually.
 
-If we want to instal all dependencies from the `requirements.txt` file, we can use the following command (*no need to run it now though*):
+If we want to install all dependencies from the `requirements.txt` file, we can use the following command (*no need to run it now though*):
 ```bash
 pip install -r requirements.txt
 ```
@@ -183,7 +183,7 @@ GET http://localhost:8000
 
 ## Prepare proof-of-concept from employees application endpoints
 
-For our react application, we will need the following endpoints and http actions:
+For our React application, we will need the following endpoints and http actions:
 `/api/v1/employees GET`
 `/api/v1/employees POST`
 `/api/v1/employees/{id} GET`
@@ -249,7 +249,7 @@ def delete_employee_by_id(id:int) :
 - [FastAPI features](https://fastapi.tiangolo.com/features/#fastapi-features)
 - [HTTP request methods](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Methods)
 
-## Potential fixes
+## After class notes
 
 PowerShell:
 ``` powershell Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force```
@@ -271,4 +271,3 @@ python -m pip --version
 ```powershell
 ./Scripts/activate.bat
 ```
-

@@ -4,8 +4,16 @@
 
 layout: home
 ---
-## Home
 
-Random stuff - usually unfinished
-- [Wheel of fortune minigame - WIP](pages/wheel-of-fortune.html)
-- [Conway's Game of Life - WIP](pages/conway.html)
+Hello, I'm George.
+
+If you somehow ended up here on purpose, you are probably looking for one of the following:
+
+- [About me](/about)
+- [PwC Academy](/academy)
+- [SQL-Training](/sql-training)
+
+Additionally, some other things I bothered to commit and push are the following:
+
+- [Guides](/guides)
+- [Games and other random stuff](/games)

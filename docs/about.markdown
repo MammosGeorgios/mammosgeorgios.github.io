@@ -1,17 +1,17 @@
 ---
 layout: page
-title: About
+title: About me
 permalink: /about/
+include_in_nav_bar: true
 ---
-Hello! 
 
-If you want to see ~~my graveyard of ideas~~ my awesome repos:
+My socials are the following: 
+- [GitHub][gmammos-github]
+- [LinkedIn][gmammos-linkedIn]
+- [FrontEndMasters][gmammos-fem]
 
-[GitHub][mammos-github]
+_I should probably add a cv here as well..._
 
-If you want to contract me (I most definitely reply to everyone):
-
-[LinkedIn][mammos-linkedIn]
-
-[mammos-github]: https://github.com/MammosGeorgios
-[mammos-linkedIn]: https://www.linkedin.com/in/mammos-georgios/
+[gmammos-github]: https://github.com/MammosGeorgios
+[gmammos-linkedIn]: https://www.linkedin.com/in/mammos-georgios/
+[gmammos-fem]: https://frontendmasters.com/u/mammosgeorgios/
