@@ -6,5 +6,5 @@ include_in_nav_bar: true
 ---
 
 ## PwC Academy
-1) [Getting started with Python](/academy/getting-started-with-python)
-2) [Downloading repository](/academy/downloading-repository)
+- [Getting started with Python](/academy/01-getting-started-with-python)
+- [Download academy repository](/academy/02-downloading-repository)

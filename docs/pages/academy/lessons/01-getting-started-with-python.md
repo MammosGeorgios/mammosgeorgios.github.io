@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Academy
-permalink: /academy/getting-started-with-python
+permalink: /academy/01-getting-started-with-python
 include_in_nav_bar: false
 ---
 

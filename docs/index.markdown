@@ -7,11 +7,11 @@ layout: home
 
 Hello, I'm George.
 
-If you somehow ended up here on purpose, you are probably looking for one of the following:
+If you ended up here on purpose, you are probably looking for one of the following:
 
 - [About me](/about)
 - [PwC Academy](/academy)
-- [SQL-Training](/sql-training)
+- [SQL Training](/sql-training)
 
 Additionally, some other things I bothered to commit and push are the following:
 
